@@ -1,0 +1,13 @@
+# .NET
+bin/
+obj/
+
+# k8s
+publish/
+
+# Rider
+.idea/
+*.sln.iml
+
+# Env / secrets
+.env
