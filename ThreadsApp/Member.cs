@@ -6,13 +6,13 @@ public class Member
 {
     private readonly string _leaseName;
     private readonly string _identity;
-    private readonly EtcdSimulator _etcd;
+    private readonly EtcdMock _etcd;
     private readonly Barrier _barrier;
 
     private readonly int _leaderDelayMs = 2000;
     private readonly int _followerDelayMs = 2000;
 
-    public Member(string leaseName, string identity, EtcdSimulator etcd, Barrier barrier)
+    public Member(string leaseName, string identity, EtcdMock etcd, Barrier barrier)
     {
         _leaseName = leaseName;
         _identity = identity;
