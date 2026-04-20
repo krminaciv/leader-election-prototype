@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeasesApp", "LeasesApp\LeasesApp.csproj", "{59555B54-F414-4991-A40B-BB1D40D50E05}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreadsApp", "ThreadsApp\ThreadsApp.csproj", "{C808EC77-119C-4265-96CD-236747C4B354}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{59555B54-F414-4991-A40B-BB1D40D50E05}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59555B54-F414-4991-A40B-BB1D40D50E05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59555B54-F414-4991-A40B-BB1D40D50E05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C808EC77-119C-4265-96CD-236747C4B354}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C808EC77-119C-4265-96CD-236747C4B354}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C808EC77-119C-4265-96CD-236747C4B354}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C808EC77-119C-4265-96CD-236747C4B354}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
