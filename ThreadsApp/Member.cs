@@ -12,6 +12,7 @@ public class Member
     private readonly int _leaderDelayMs = 2000;
     private readonly int _followerDelayMs = 2000;
 
+    // note: add releaseLease() to release a lease before dying
     public Member(string leaseName, string identity, EtcdMock etcd, Barrier barrier)
     {
         _leaseName = leaseName;
@@ -26,20 +27,20 @@ public class Member
         Random waitTime = new Random();
         
         //await Task.Delay(waitTime.Next(1000,3000), ct);
-        await Task.Delay(1000, ct);
-
+        // _barrier.SignalAndWait();
+        await Task.Delay(50, ct);
+        
         while (!ct.IsCancellationRequested)
         {
             try
             {
                 //await Task.Delay(waitTime.Next(1000,3000), ct);
-                //await Task.Delay(2000, ct);
+                // await Task.Delay(5000, ct);
                 
-                // var lease = GetOrCreateLease(_leaseName, _identity);
                 var lease = _etcd.GetOrCreate(_leaseName, _identity);
                 
-                //_barrier.SignalAndWait();
-                await Task.Delay(100);
+                // _barrier.SignalAndWait();
+                // await Task.Delay(50);
 
                 bool isExpired = lease.isExpired();
                 bool isMine = lease.isMine(_identity);
@@ -74,6 +75,17 @@ public class Member
                Console.WriteLine("Member canceled: " + _identity);
                break;
             }
+            // finally
+            // {
+            //     _barrier.SignalAndWait();
+            //     await Task.Delay(50);
+            // }
+            // catch (Exception ex)
+            // {
+            //     Console.WriteLine($"{_identity} ERROR: {ex.Message}");
+            //     await Task.Delay(_followerDelayMs);
+            //     continue; 
+            // }
             
         }
         Console.WriteLine("Member stopped with identity: " +  _identity);

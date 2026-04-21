@@ -103,6 +103,7 @@ public class LeaderWorker
         Log.Information("Worker {Identity} shutting down...", _identity);
     }
 
+    // note: ovde se kreira lease ali se niko ne postavlja za holdera, pa se kasnije u acqOrRenew bore za leaase
     private async Task<V1Lease> GetOrCreateLeaseAsync()
     {
         try

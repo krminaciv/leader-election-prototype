@@ -7,7 +7,7 @@ public class Lease
     public string Name { get; set; }
 
     public string Holder { get; set; }
-    public DateTime AcquireTime { get; set; }
+    public DateTime? AcquireTime { get; set; }
     public DateTime? RenewTime { get; set; }
     public int DurationSeconds { get; set; }
     public long ResourceVersion { get; set; }

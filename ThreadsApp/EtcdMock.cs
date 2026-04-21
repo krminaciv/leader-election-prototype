@@ -1,36 +1,59 @@
+using Microsoft.VisualBasic.CompilerServices;
+
 namespace ThreadsApp;
 
 public class EtcdMock
 {
     private readonly Dictionary<string, Lease> _leases = new();
     private readonly object _lock = new();
+    private readonly Barrier _barrier;
+
+    public EtcdMock(Barrier barrier)
+    {
+        _barrier = barrier;
+    }
     
+    
+    // GetOrCreate:
+    //     read
+    //     if not found:
+    //         try create
+    //         if conflict:
+    //             read again
     public Lease GetOrCreate(string name, string identity)
     {
+        // try to read
+        var lease = Query(name);
+        if (lease != null)
+            return lease;
+        
+        _barrier.SignalAndWait();
+        
+        // lease does not exist, try to create
         lock (_lock)
         {
-            // lease does exist
-            if (_leases.TryGetValue(name, out var lease))
+            if (!_leases.TryGetValue(name, out var existing))
             {
-                return Clone(lease); 
+                var newLease = new Lease
+                {
+                    Name = name,
+                    Holder = "", 
+                    AcquireTime = null,
+                    RenewTime = null,
+                    DurationSeconds = 10,
+                    ResourceVersion = 0
+                };
+
+                _leases[name] = newLease;
+                
+                Console.WriteLine($"{identity}: Successfuly created Lease - {newLease.Name}-.");
+                return Clone(newLease); 
             }
-
-            // lease does not exist
-            var now = DateTime.UtcNow;
-            var newLease = new Lease
-            {
-                Name = name,
-                Holder = identity,
-                AcquireTime = now,
-                RenewTime = now,
-                DurationSeconds = 10,
-                ResourceVersion = 0
-            };
-
-            _leases[name] = newLease;
-
-            return Clone(newLease);
         }
+        
+        //someone else created, try to read again
+        Console.WriteLine($"{identity}: Someone else created Lease - {name}-. (CONFLICT 409)");
+        return Query(name);
     }
 
     public bool TryAcquireOrRenew(Lease lease, string member)
@@ -67,6 +90,17 @@ public class EtcdMock
             current.RenewTime = now;
 
             return true;
+        }
+    }
+    
+    public Lease Query(string name)
+    {
+        lock (_lock)
+        {
+            if (!_leases.TryGetValue(name, out var lease))
+                return null;
+
+            return Clone(lease);
         }
     }
     
